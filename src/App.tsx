@@ -1,7 +1,7 @@
-function App() {
-  const text = 'jokes';
+import AuthenticatedApp from './AuthenticatedApp';
 
-  return <div>{text}</div>;
+function App() {
+  return <AuthenticatedApp />;
 }
 
 export default App;
