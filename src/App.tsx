@@ -1,7 +1,12 @@
+import Container from './layouts/Container';
 import AuthenticatedApp from './AuthenticatedApp';
 
 function App() {
-  return <AuthenticatedApp />;
+  return (
+    <Container>
+      <AuthenticatedApp />
+    </Container>
+  );
 }
 
 export default App;

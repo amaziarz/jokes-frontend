@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import path from 'path';
 import react from '@vitejs/plugin-react';
 
 const rootRedirectPlugin = () => ({
@@ -19,7 +20,18 @@ const rootRedirectPlugin = () => ({
   },
 });
 
+const aliasDirectories = ['common', 'config', 'context', 'layouts', 'pages'];
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), rootRedirectPlugin()],
+  resolve: {
+    alias: aliasDirectories.reduce(
+      (acc, current) => ({
+        ...acc,
+        [current]: path.resolve(__dirname, 'src', current),
+      }),
+      {},
+    ),
+  },
 });
