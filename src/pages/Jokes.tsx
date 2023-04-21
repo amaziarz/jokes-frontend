@@ -26,6 +26,7 @@ function Jokes() {
             onPreviousPage={setPage}
             onNextPage={setPage}
             onLimitChange={setLimit}
+            isLoading={jokesQuery.isFetching}
           />
         </div>
       ) : null}

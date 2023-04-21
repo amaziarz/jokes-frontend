@@ -4,5 +4,5 @@ export interface Joke {
   Body: string;
   Author: string;
   Views: number;
-  CreatedAt: number;
+  CreatedAt: string;
 }

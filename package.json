@@ -12,6 +12,8 @@
     "check-types": "tsc"
   },
   "dependencies": {
+    "@tanstack/react-query-devtools": "^4.29.3",
+    "dayjs": "^1.11.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",

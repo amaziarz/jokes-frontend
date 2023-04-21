@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Joke } from 'types/Joke';
+import { formatDate, formatEmail } from 'common/utils';
 
 interface Props {
   jokes: Joke[];
@@ -12,7 +13,7 @@ function JokesList({ jokes }: Props) {
         <tr>
           <th>Title</th>
           <th>Author</th>
-          <th>Created Data</th>
+          <th>Created Date</th>
           <th>Views</th>
         </tr>
       </thead>
@@ -20,8 +21,8 @@ function JokesList({ jokes }: Props) {
         {jokes.map((joke) => (
           <tr key={joke.id}>
             <td>{joke.Title}</td>
-            <td>{joke.Author}</td>
-            <td>{joke.CreatedAt}</td>
+            <td>{formatEmail(joke.Author)}</td>
+            <td>{formatDate(joke.CreatedAt)}</td>
             <td>{joke.Views}</td>
           </tr>
         ))}

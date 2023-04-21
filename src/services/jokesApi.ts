@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
+import { Joke } from 'types/Joke';
 import { apiClient } from './apiClient';
-import { Joke } from '../types/Joke';
 
 interface UseJokesParams {
   page: number;
@@ -12,5 +12,9 @@ function getJokes({ page, limit }: UseJokesParams): Promise<Joke[]> {
 }
 
 export function useJokes({ page, limit }: UseJokesParams) {
-  return useQuery(['jokes', page, limit], () => getJokes({ page, limit }));
+  return useQuery({
+    queryKey: ['jokes', { page, limit }],
+    queryFn: () => getJokes({ page, limit }),
+    keepPreviousData: true,
+  });
 }
