@@ -1,12 +1,19 @@
 import { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 interface Props {
   children: ReactNode;
 }
 
 function AppProviders({ children }: Props) {
-  return <BrowserRouter>{children}</BrowserRouter>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </QueryClientProvider>
+  );
 }
 
 export default AppProviders;
