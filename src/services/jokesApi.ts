@@ -8,7 +8,7 @@ interface UseJokesParams {
 }
 
 function getJokes({ page, limit }: UseJokesParams): Promise<Joke[]> {
-  return apiClient<Joke[]>(`/jokes?_page=${page}&limit=${limit}`);
+  return apiClient<Joke[]>(`/jokes?_page=${page}&_limit=${limit}`);
 }
 
 export function useJokes({ page, limit }: UseJokesParams) {

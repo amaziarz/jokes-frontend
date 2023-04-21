@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import path from 'path';
+import fs from 'fs';
 import react from '@vitejs/plugin-react';
 
 const rootRedirectPlugin = () => ({
@@ -20,18 +21,22 @@ const rootRedirectPlugin = () => ({
   },
 });
 
-const aliasDirectories = ['common', 'config', 'context', 'layouts', 'pages'];
+const aliasDirectories = fs
+  .readdirSync(path.resolve(__dirname, 'src'), { withFileTypes: true })
+  .filter((file) => file.isDirectory())
+  .map((dir) => dir.name)
+  .reduce(
+    (acc, current) => ({
+      ...acc,
+      [current]: path.resolve(__dirname, 'src', current),
+    }),
+    {},
+  );
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), rootRedirectPlugin()],
   resolve: {
-    alias: aliasDirectories.reduce(
-      (acc, current) => ({
-        ...acc,
-        [current]: path.resolve(__dirname, 'src', current),
-      }),
-      {},
-    ),
+    alias: aliasDirectories,
   },
 });
