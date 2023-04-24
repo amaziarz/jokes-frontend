@@ -6,3 +6,5 @@ export interface Joke {
   Views: number;
   CreatedAt: string;
 }
+
+export type JokeFormValues = Pick<Joke, 'Title' | 'Body' | 'Author' | 'Views'>;

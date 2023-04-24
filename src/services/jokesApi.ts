@@ -1,6 +1,11 @@
-import { useMutation, useQuery } from 'react-query';
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { Joke } from 'types/Joke';
+import { Joke, JokeFormValues } from 'types/Joke';
 import { SortOrder } from 'types/SortOrder';
 import { toQueryString } from 'common/utils';
 import { apiClient } from './apiClient';
@@ -59,6 +64,32 @@ export function useJoke(queryParams: UseJokeParams) {
   });
 }
 
+function invalidateJokes(queryClient: QueryClient) {
+  return queryClient.invalidateQueries({ queryKey: ['jokes'] });
+}
+
+function setJoke(queryClient: QueryClient, joke: Joke) {
+  return queryClient.setQueryData(['joke', { jokeId: joke.id }], joke);
+}
+
+function addJoke(jokeFormValues: JokeFormValues): Promise<Joke> {
+  return apiClient<Joke, JokeFormValues>('/jokes', { data: jokeFormValues });
+}
+
+export function useAddJoke() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: addJoke,
+    onSuccess: async (joke) => {
+      await invalidateJokes(queryClient);
+      setJoke(queryClient, joke);
+      navigate(`/jokes/${joke.id}`);
+    },
+  });
+}
+
 function updateJoke({ id: jokeId, ...joke }: Joke): Promise<Joke> {
   return apiClient<Joke, Omit<Joke, 'id'>>(`/jokes/${jokeId}`, {
     method: 'PUT',
@@ -67,8 +98,14 @@ function updateJoke({ id: jokeId, ...joke }: Joke): Promise<Joke> {
 }
 
 export function useUpdateJoke() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: updateJoke,
+    onSuccess: async (joke) => {
+      await invalidateJokes(queryClient);
+      setJoke(queryClient, joke);
+    },
   });
 }
 
@@ -78,11 +115,13 @@ function removeJoke(jokeId: number): Promise<void> {
 
 export function useRemoveJoke() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: removeJoke,
-    onSuccess: () => {
-      navigate('/jokes');
+    onSuccess: async () => {
+      await invalidateJokes(queryClient);
+      navigate('/jokes', { replace: true });
     },
   });
 }

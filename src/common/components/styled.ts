@@ -18,12 +18,17 @@ Spinner.defaultProps = {
   'aria-label': 'loading',
 };
 
-export const Paragraph = styled.p<{ textAlign?: string }>`
+export const Paragraph = styled.p<{ textAlign?: string; color?: string }>`
   font-size: 1rem;
   margin: 1rem 0;
   ${(props) =>
     props.textAlign &&
     css`
       text-align: ${props.textAlign};
+    `}
+  ${(props) =>
+    props.color &&
+    css`
+      color: ${props.color};
     `}
 `;

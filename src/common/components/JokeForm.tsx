@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { Joke } from 'types/Joke';
-
-export type JokeFormValues = Pick<Joke, 'Title' | 'Body' | 'Author'>;
+import { Joke, JokeFormValues } from 'types/Joke';
+import { Paragraph } from 'common/components/styled';
 
 interface Props {
   joke?: Joke;
   onSubmit: (values: JokeFormValues) => void;
   onRemove?: (jokeId: number) => void;
   isSubmitting: boolean;
+  isError: boolean;
 }
 
-function JokeForm({ joke, onSubmit, onRemove, isSubmitting }: Props) {
+function JokeForm({ joke, onSubmit, onRemove, isSubmitting, isError }: Props) {
   return (
     <Wrapper>
       <Formik<JokeFormValues>
@@ -19,6 +19,7 @@ function JokeForm({ joke, onSubmit, onRemove, isSubmitting }: Props) {
           Title: joke?.Title || '',
           Author: joke?.Author || '',
           Body: joke?.Body || '',
+          Views: joke?.Views || 0,
         }}
         onSubmit={(values) => {
           onSubmit(values);
@@ -35,6 +36,11 @@ function JokeForm({ joke, onSubmit, onRemove, isSubmitting }: Props) {
               <label htmlFor="Author">Author</label>
               <Field id="Author" type="text" name="Author" />
               <ErrorMessage name="Author" component="div" />
+            </FieldWrapper>
+            <FieldWrapper>
+              <label htmlFor="Views">Views</label>
+              <Field id="Views" type="number" name="Views" min="0" />
+              <ErrorMessage name="Views" component="div" />
             </FieldWrapper>
             <FieldWrapper>
               <label htmlFor="Body">Body</label>
@@ -60,12 +66,17 @@ function JokeForm({ joke, onSubmit, onRemove, isSubmitting }: Props) {
           </Form>
         )}
       </Formik>
+      {isError ? (
+        <Paragraph color="red">
+          Something went wrong. Please try again.
+        </Paragraph>
+      ) : null}
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  min-width: 600px;
+  width: 100%;
 `;
 
 const FieldWrapper = styled.div`

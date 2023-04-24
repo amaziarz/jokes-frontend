@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { JokesFilters, useJokes } from 'services/jokesApi';
 import { Paragraph, Spinner } from 'common/components/styled';
@@ -7,17 +8,16 @@ import { debounce } from 'common/utils';
 import { SortOrder } from 'types/SortOrder';
 import Pagination, { initialLimit } from './Pagination';
 import JokesList from './JokesList';
-import JokesListFilters from './JokesListFilters';
+import JokesListFilters, { initialFilters } from './JokesListFilters';
 
 function Jokes() {
+  const navigate = useNavigate();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(initialLimit);
   const [sortKey, setSortKey] = useState<string>();
   const [sortOrder, setSortOrder] = useState<SortOrder>();
-  const [filters, setFilters] = useState<JokesFilters>({
-    CreatedAt: '',
-    Views: '',
-  });
+  const [filters, setFilters] = useState<JokesFilters>(initialFilters);
 
   const jokesQuery = useJokes({
     page,
@@ -39,24 +39,26 @@ function Jokes() {
 
   return (
     <Wrapper>
-      {jokesQuery.isLoading ? <Spinner /> : null}
-      {jokesQuery.isSuccess ? (
-        <div>
-          <JokesListFilters onChange={debounce(handleFiltersChange)} />
-          <LoadingWrapper isLoading={jokesQuery.isFetching}>
-            <JokesList
-              jokes={jokesQuery.data}
-              sortKey={sortKey}
-              sortOrder={sortOrder}
-              onSort={handleSort}
-            />
-            {jokesQuery.data.length === 0 ? (
-              <Paragraph textAlign="center">
-                No data found for selected filters
-              </Paragraph>
-            ) : null}
-          </LoadingWrapper>
-          {jokesQuery.data.length ? (
+      <div>
+        <JokesListFilters
+          onChange={debounce(handleFiltersChange)}
+          onAddJoke={() => navigate('/jokes/new')}
+        />
+        {jokesQuery.isSuccess ? (
+          <>
+            <LoadingWrapper isLoading={jokesQuery.isFetching}>
+              <JokesList
+                jokes={jokesQuery.data}
+                sortKey={sortKey}
+                sortOrder={sortOrder}
+                onSort={handleSort}
+              />
+              {jokesQuery.data.length === 0 ? (
+                <Paragraph textAlign="center">
+                  No data found for selected filters
+                </Paragraph>
+              ) : null}
+            </LoadingWrapper>
             <Pagination
               page={page}
               limit={limit}
@@ -65,9 +67,10 @@ function Jokes() {
               onNextPage={setPage}
               onLimitChange={setLimit}
             />
-          ) : null}
-        </div>
-      ) : null}
+          </>
+        ) : null}
+      </div>
+      {jokesQuery.isLoading ? <Spinner /> : null}
     </Wrapper>
   );
 }

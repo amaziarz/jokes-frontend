@@ -29,6 +29,7 @@ function EditJoke() {
           isSubmitting={
             updateJokeMutation.isLoading || removeJokeMutation.isLoading
           }
+          isError={updateJokeMutation.isError || removeJokeMutation.isError}
         />
       ) : null}
       {jokeQuery.isError ? <Paragraph>Joke not found</Paragraph> : null}

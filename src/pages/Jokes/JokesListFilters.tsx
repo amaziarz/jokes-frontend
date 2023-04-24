@@ -1,17 +1,19 @@
 import styled from 'styled-components';
 import { ChangeEvent, useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
 import { JokesFilters } from 'services/jokesApi';
 
 interface Props {
   onChange: (filters: JokesFilters) => void;
+  onAddJoke: () => void;
 }
 
-const initialFilters: JokesFilters = {
+export const initialFilters: JokesFilters = {
   CreatedAt: '',
   Views: '',
 };
 
-function JokesListFilters({ onChange }: Props) {
+function JokesListFilters({ onChange, onAddJoke }: Props) {
   const [filters, setFilters] = useState<JokesFilters>(initialFilters);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -31,38 +33,56 @@ function JokesListFilters({ onChange }: Props) {
 
   return (
     <Wrapper>
-      <FilterWrapper>
-        <Label htmlFor="CreatedAt">Created Date:</Label>
-        <input
-          id="CreatedAt"
-          type="date"
-          name="CreatedAt"
-          value={filters.CreatedAt}
-          onChange={handleChange}
-        />
-      </FilterWrapper>
-      <FilterWrapper>
-        <Label htmlFor="Views">Views:</Label>
-        <input
-          id="Views"
-          type="number"
-          name="Views"
-          value={filters.Views}
-          onChange={handleChange}
-        />
-      </FilterWrapper>
-      <ClearButton onClick={handleClear}>Clear</ClearButton>
+      <AddButton onClick={onAddJoke}>
+        Add joke <PlusIcon />
+      </AddButton>
+      <FiltersWrapper>
+        <FilterField>
+          <Label htmlFor="CreatedAt">Created Date:</Label>
+          <input
+            id="CreatedAt"
+            type="date"
+            name="CreatedAt"
+            value={filters.CreatedAt}
+            onChange={handleChange}
+          />
+        </FilterField>
+        <FilterField>
+          <Label htmlFor="Views">Views:</Label>
+          <input
+            id="Views"
+            type="number"
+            name="Views"
+            value={filters.Views}
+            onChange={handleChange}
+          />
+        </FilterField>
+        <ClearButton onClick={handleClear}>Clear</ClearButton>
+      </FiltersWrapper>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: 16px;
 `;
 
-const FilterWrapper = styled.div`
+const AddButton = styled.button`
+  display: flex;
+  align-items: center;
+`;
+
+const PlusIcon = styled(FaPlus)`
+  margin-left: 8px;
+`;
+
+const FiltersWrapper = styled.div`
+  display: flex;
+`;
+
+const FilterField = styled.div`
   margin-left: 8px;
 `;
 
