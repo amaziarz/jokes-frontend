@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { JokesFilters, useJokes } from 'services/jokesApi';
-import { Spinner } from 'common/components/styled';
+import { Paragraph, Spinner } from 'common/components/styled';
+import LoadingWrapper from 'common/components/LoadingWrapper';
 import { debounce } from 'common/utils';
 import { SortOrder } from 'types/SortOrder';
 import Pagination, { initialLimit } from './Pagination';
@@ -42,21 +43,29 @@ function Jokes() {
       {jokesQuery.isSuccess ? (
         <div>
           <JokesListFilters onChange={debounce(handleFiltersChange)} />
-          <JokesList
-            jokes={jokesQuery.data}
-            sortKey={sortKey}
-            sortOrder={sortOrder}
-            onSort={handleSort}
-          />
-          <Pagination
-            page={page}
-            limit={limit}
-            count={jokesQuery.data.length}
-            onPreviousPage={setPage}
-            onNextPage={setPage}
-            onLimitChange={setLimit}
-            isLoading={jokesQuery.isFetching}
-          />
+          <LoadingWrapper isLoading={jokesQuery.isFetching}>
+            <JokesList
+              jokes={jokesQuery.data}
+              sortKey={sortKey}
+              sortOrder={sortOrder}
+              onSort={handleSort}
+            />
+            {jokesQuery.data.length === 0 ? (
+              <Paragraph textAlign="center">
+                No data found for selected filters
+              </Paragraph>
+            ) : null}
+          </LoadingWrapper>
+          {jokesQuery.data.length ? (
+            <Pagination
+              page={page}
+              limit={limit}
+              count={jokesQuery.data.length}
+              onPreviousPage={setPage}
+              onNextPage={setPage}
+              onLimitChange={setLimit}
+            />
+          ) : null}
         </div>
       ) : null}
     </Wrapper>

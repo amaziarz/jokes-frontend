@@ -7,8 +7,11 @@ export function formatDate(date: string, format = ISO_DATE_FORMAT): string {
   return dayjs(date).format(format);
 }
 
-export function formatEmail(email: string): string {
-  const [name, domain] = email.split('@');
+export function formatEmail(value: string): string {
+  if (!value.includes('@')) {
+    return value;
+  }
+  const [name, domain] = value.split('@');
   const [, ...suffixParts] = domain.split('.');
   const suffix = suffixParts.join('.');
 
