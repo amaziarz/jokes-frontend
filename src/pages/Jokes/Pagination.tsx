@@ -7,6 +7,7 @@ export const initialLimit = LIMIT_OPTIONS[0];
 interface Props {
   page: number;
   limit: number;
+  count: number;
   onPreviousPage: (page: number) => void;
   onNextPage: (page: number) => void;
   onLimitChange: (limit: number) => void;
@@ -16,19 +17,22 @@ interface Props {
 function Pagination({
   page,
   limit,
+  count,
   onNextPage,
   onPreviousPage,
   onLimitChange,
   isLoading,
 }: Props) {
   return (
-    <PaginationWrapper>
+    <Wrapper>
       {isLoading ? <Spinner size={16} /> : null}
       <ButtonWrapper>
         <button disabled={page === 1} onClick={() => onPreviousPage(page - 1)}>
           {'<'}
         </button>
-        <button onClick={() => onNextPage(page + 1)}>{'>'}</button>
+        <button disabled={count < limit} onClick={() => onNextPage(page + 1)}>
+          {'>'}
+        </button>
       </ButtonWrapper>
       <Select
         name="limit"
@@ -41,11 +45,11 @@ function Pagination({
           </option>
         ))}
       </Select>
-    </PaginationWrapper>
+    </Wrapper>
   );
 }
 
-const PaginationWrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;

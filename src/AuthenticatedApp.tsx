@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import Jokes from './pages/Jokes';
+import Jokes from './pages/Jokes/Jokes';
 
 function AuthenticatedApp() {
   return (
