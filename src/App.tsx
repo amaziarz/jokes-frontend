@@ -1,5 +1,5 @@
 import { useAuth } from './context/AuthProvider';
-import Container from './layouts/Container';
+import AppContainer from './layouts/AppContainer';
 import AuthenticatedApp from './AuthenticatedApp';
 import UnauthenticatedApp from './UnauthenticatedApp';
 
@@ -7,9 +7,9 @@ function App() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <Container>
+    <AppContainer>
       {isAuthenticated ? <AuthenticatedApp /> : <UnauthenticatedApp />}
-    </Container>
+    </AppContainer>
   );
 }
 
