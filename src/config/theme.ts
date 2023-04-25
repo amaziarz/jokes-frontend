@@ -14,12 +14,12 @@ const colors = {
 export const appTheme: AppThemeConfig = {
   light: {
     colors,
-    backgroundColor: '#ffffff',
-    fontColor: '#333333',
+    backgroundColor: colors.white,
+    fontColor: colors.grey,
   },
   dark: {
     colors,
-    backgroundColor: '#333333',
-    fontColor: '#ffffff',
+    backgroundColor: colors.grey,
+    fontColor: colors.white,
   },
 };

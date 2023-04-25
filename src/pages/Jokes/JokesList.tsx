@@ -61,7 +61,9 @@ function JokesList({ jokes, onSort, sortOrder, sortKey }: Props) {
             <TableItem>
               {formatDate(joke.CreatedAt, LIST_DATE_FORMAT)}
             </TableItem>
-            <TableItem>{joke.Views}</TableItem>
+            <TableItem backgroundColor={getViewsColor(joke.Views)}>
+              {joke.Views}
+            </TableItem>
           </tr>
         ))}
       </tbody>
@@ -74,12 +76,37 @@ const TableHeader = styled.th`
   font-weight: 700;
 `;
 
-const TableItem = styled.td`
+const TableItem = styled.td<{ backgroundColor?: ViewsColor }>`
   padding: 0.5rem 1.5rem;
+  ${(props) =>
+    props.backgroundColor &&
+    css`
+      background-color: ${props.backgroundColor};
+      color: ${props.backgroundColor === 'yellow'
+        ? props.theme.colors.grey
+        : props.theme.colors.white};
+    `}
 
   &:not(:last-child) {
     border-right: 1px solid;
   }
 `;
+
+type ViewsColor = 'tomato' | 'orange' | 'yellow' | 'green';
+
+function getViewsColor(views: number): ViewsColor | undefined {
+  if (views >= 0 && views <= 25) {
+    return 'tomato';
+  }
+  if (views <= 50) {
+    return 'orange';
+  }
+  if (views <= 75) {
+    return 'yellow';
+  }
+  if (views <= 100) {
+    return 'green';
+  }
+}
 
 export default JokesList;
