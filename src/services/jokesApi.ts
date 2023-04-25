@@ -11,6 +11,11 @@ import { SortOrder } from 'types/SortOrder';
 import { toQueryString } from 'common/utils';
 import { apiClient } from './apiClient';
 
+const QUERY_KEYS = {
+  JOKES: 'jokes',
+  JOKE: 'joke',
+};
+
 export type JokesFilterKey = 'Views' | 'CreatedAt';
 export type JokesFilters = {
   [key in JokesFilterKey]: string;
@@ -43,7 +48,7 @@ function getJokes({
 
 export function useJokes(queryParams: UseJokesParams) {
   return useQuery({
-    queryKey: ['jokes', queryParams],
+    queryKey: [QUERY_KEYS.JOKES, queryParams],
     queryFn: () => getJokes(queryParams),
     keepPreviousData: true,
   });
@@ -59,18 +64,18 @@ function getJokeById({ jokeId }: UseJokeParams): Promise<Joke> {
 
 export function useJoke(queryParams: UseJokeParams) {
   return useQuery({
-    queryKey: ['joke', queryParams],
+    queryKey: [QUERY_KEYS.JOKE, queryParams],
     queryFn: () => getJokeById(queryParams),
     enabled: !Number.isNaN(queryParams.jokeId),
   });
 }
 
 function invalidateJokes(queryClient: QueryClient) {
-  return queryClient.invalidateQueries({ queryKey: ['jokes'] });
+  return queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.JOKES] });
 }
 
 function setJoke(queryClient: QueryClient, joke: Joke) {
-  return queryClient.setQueryData(['joke', { jokeId: joke.id }], joke);
+  return queryClient.setQueryData([QUERY_KEYS.JOKE, { jokeId: joke.id }], joke);
 }
 
 function addJoke(jokeFormValues: JokeFormValues): Promise<Joke> {
@@ -120,8 +125,9 @@ export function useRemoveJoke() {
 
   return useMutation({
     mutationFn: removeJoke,
-    onSuccess: async () => {
+    onSuccess: async (_, jokeId) => {
       await invalidateJokes(queryClient);
+      queryClient.removeQueries([QUERY_KEYS.JOKE, { jokeId }]);
       navigate('/jokes', { replace: true });
     },
   });
@@ -131,7 +137,8 @@ export function useRemoveJokeQueries() {
   const queryClient = useQueryClient();
 
   return useCallback(() => {
-    queryClient.removeQueries({ queryKey: ['jokes'] });
-    queryClient.removeQueries({ queryKey: ['joke'] });
+    Object.values(QUERY_KEYS).forEach((key) => {
+      queryClient.removeQueries({ queryKey: [key] });
+    });
   }, [queryClient]);
 }
