@@ -70,6 +70,7 @@ function JokesListFilters({ onChange, onAddJoke }: Props) {
             name="Views"
             value={filters.Views}
             onChange={handleChange}
+            min="0"
           />
         </FieldWrapper>
         <button onClick={handleClear} css="margin-left: 0.5rem;">
