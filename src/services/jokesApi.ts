@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   QueryClient,
   useMutation,
@@ -124,4 +125,13 @@ export function useRemoveJoke() {
       navigate('/jokes', { replace: true });
     },
   });
+}
+
+export function useRemoveJokeQueries() {
+  const queryClient = useQueryClient();
+
+  return useCallback(() => {
+    queryClient.removeQueries({ queryKey: ['jokes'] });
+    queryClient.removeQueries({ queryKey: ['joke'] });
+  }, [queryClient]);
 }
