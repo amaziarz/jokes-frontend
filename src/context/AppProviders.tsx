@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import AuthProvider from './AuthProvider';
 import AppThemeProvider from './AppThemeProvider';
+import AppStateProvider from './AppStateProvider';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,7 +22,9 @@ function AppProviders({ children }: Props) {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <AppThemeProvider>{children}</AppThemeProvider>
+          <AppThemeProvider>
+            <AppStateProvider>{children}</AppStateProvider>
+          </AppThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

@@ -15,7 +15,7 @@ export type JokesFilters = {
   [key in JokesFilterKey]: string;
 };
 
-interface UseJokesParams {
+export interface UseJokesParams {
   page: number;
   limit: number;
   sort?: string;

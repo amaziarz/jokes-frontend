@@ -27,8 +27,11 @@ function JokesListFilters({ onChange, onAddJoke }: Props) {
   }
 
   function handleClear() {
-    setFilters(initialFilters);
-    onChange(initialFilters);
+    const areFiltersChanged = Object.values(filters).some(Boolean);
+    if (areFiltersChanged) {
+      setFilters(initialFilters);
+      onChange(initialFilters);
+    }
   }
 
   return (

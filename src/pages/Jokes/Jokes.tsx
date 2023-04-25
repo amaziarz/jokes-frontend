@@ -1,40 +1,29 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { JokesFilters, useJokes } from 'services/jokesApi';
+import { useJokes } from 'services/jokesApi';
 import { Paragraph, Spinner } from 'common/components/styled';
 import LoadingWrapper from 'common/components/LoadingWrapper';
 import { debounce } from 'common/utils';
-import { SortOrder } from 'types/SortOrder';
-import Pagination, { initialLimit } from './Pagination';
+import { setJokeListParams, useAppState } from 'context/AppStateProvider';
+import Pagination from './Pagination';
 import JokesList from './JokesList';
-import JokesListFilters, { initialFilters } from './JokesListFilters';
+import JokesListFilters from './JokesListFilters';
 
 function Jokes() {
   const navigate = useNavigate();
-
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(initialLimit);
-  const [sortKey, setSortKey] = useState<string>();
-  const [sortOrder, setSortOrder] = useState<SortOrder>();
-  const [filters, setFilters] = useState<JokesFilters>(initialFilters);
+  const [
+    {
+      jokeListParams: { page, limit, sort, order, filters },
+    },
+    dispatch,
+  ] = useAppState();
 
   const jokesQuery = useJokes({
     page,
     limit,
-    sort: sortKey,
-    order: sortOrder,
+    sort,
+    order,
     filters,
   });
-
-  function handleSort(key: string, order: SortOrder) {
-    setSortKey(key);
-    setSortOrder(order);
-  }
-
-  function handleFiltersChange(nextFilters: JokesFilters) {
-    setFilters(nextFilters);
-    setPage(1);
-  }
 
   return (
     <div
@@ -47,7 +36,12 @@ function Jokes() {
     >
       <div>
         <JokesListFilters
-          onChange={debounce(handleFiltersChange)}
+          onChange={debounce((nextFilters) =>
+            setJokeListParams(dispatch, {
+              filters: nextFilters,
+              page: 1,
+            }),
+          )}
           onAddJoke={() => navigate('/jokes/new')}
         />
         {jokesQuery.isSuccess ? (
@@ -55,9 +49,14 @@ function Jokes() {
             <LoadingWrapper isLoading={jokesQuery.isFetching}>
               <JokesList
                 jokes={jokesQuery.data}
-                sortKey={sortKey}
-                sortOrder={sortOrder}
-                onSort={handleSort}
+                sortKey={sort}
+                sortOrder={order}
+                onSort={(sortKey, sortOrder) =>
+                  setJokeListParams(dispatch, {
+                    sort: sortKey,
+                    order: sortOrder,
+                  })
+                }
               />
               {jokesQuery.data.length === 0 ? (
                 <Paragraph textAlign="center">
@@ -69,9 +68,15 @@ function Jokes() {
               page={page}
               limit={limit}
               count={jokesQuery.data.length}
-              onPreviousPage={setPage}
-              onNextPage={setPage}
-              onLimitChange={setLimit}
+              onPreviousPage={(prevPage) =>
+                setJokeListParams(dispatch, { page: prevPage })
+              }
+              onNextPage={(nextPage) =>
+                setJokeListParams(dispatch, { page: nextPage })
+              }
+              onLimitChange={(nextLimit) =>
+                setJokeListParams(dispatch, { limit: nextLimit })
+              }
             />
           </>
         ) : null}
