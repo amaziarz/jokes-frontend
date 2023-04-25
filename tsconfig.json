@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": "./src",
-
+    "types": ["styled-components/cssprop"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

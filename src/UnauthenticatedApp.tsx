@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import styled from 'styled-components';
 import { useAuth } from 'context/AuthProvider';
 
 function UnauthenticatedApp() {
@@ -14,20 +13,20 @@ function UnauthenticatedApp() {
   }
 
   return (
-    <Wrapper>
+    <div
+      css={`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 50vh;
+      `}
+    >
       <button onClick={handleLogin} disabled={isLoading}>
         Login
       </button>
-    </Wrapper>
+    </div>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 50vh;
-`;
 
 export default UnauthenticatedApp;

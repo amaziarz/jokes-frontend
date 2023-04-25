@@ -34,7 +34,7 @@ export function debounce<T extends unknown[], U = void>(
   fn: (...args: T) => U,
   delay = 500,
 ) {
-  let timeoutId: NodeJS.Timeout;
+  let timeoutId: number;
   return (...args: T) => {
     if (timeoutId) {
       clearTimeout(timeoutId);

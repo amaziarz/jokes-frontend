@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { css } from 'styled-components';
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
 import { SortOrder } from 'types/SortOrder';
 
@@ -18,24 +18,23 @@ function Sort({ onSort, sortKey, currentSortKey, currentOrder }: Props) {
   }
 
   return (
-    <SortButton
+    <button
       onClick={() =>
         onSort(
           sortKey,
           currentSortKey === sortKey && currentOrder === 'asc' ? 'desc' : 'asc',
         )
       }
+      css={css`
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: ${(props) => props.theme.fontColor};
+      `}
     >
       {getIcon()}
-    </SortButton>
+    </button>
   );
 }
-
-const SortButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: ${(props) => props.theme.fontColor};
-`;
 
 export default Sort;

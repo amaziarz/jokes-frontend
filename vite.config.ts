@@ -35,7 +35,14 @@ const aliasDirectories = fs
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), rootRedirectPlugin()],
+  plugins: [
+    react({
+      babel: {
+        plugins: ['babel-plugin-styled-components'],
+      },
+    }),
+    rootRedirectPlugin(),
+  ],
   resolve: {
     alias: aliasDirectories,
   },

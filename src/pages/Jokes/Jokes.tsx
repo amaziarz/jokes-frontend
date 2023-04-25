@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { JokesFilters, useJokes } from 'services/jokesApi';
 import { Paragraph, Spinner } from 'common/components/styled';
 import LoadingWrapper from 'common/components/LoadingWrapper';
@@ -38,7 +37,14 @@ function Jokes() {
   }
 
   return (
-    <Wrapper>
+    <div
+      css={`
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      `}
+    >
       <div>
         <JokesListFilters
           onChange={debounce(handleFiltersChange)}
@@ -71,15 +77,8 @@ function Jokes() {
         ) : null}
       </div>
       {jokesQuery.isLoading ? <Spinner /> : null}
-    </Wrapper>
+    </div>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-`;
 
 export default Jokes;

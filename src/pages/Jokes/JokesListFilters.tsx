@@ -32,13 +32,25 @@ function JokesListFilters({ onChange, onAddJoke }: Props) {
   }
 
   return (
-    <Wrapper>
-      <AddButton onClick={onAddJoke}>
-        Add joke <PlusIcon />
-      </AddButton>
-      <FiltersWrapper>
-        <FilterField>
-          <Label htmlFor="CreatedAt">Created Date:</Label>
+    <div
+      css={`
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+      `}
+    >
+      <button
+        onClick={onAddJoke}
+        css={`
+          display: flex;
+          align-items: center;
+        `}
+      >
+        Add joke <FaPlus css="margin-left: 8px;" />
+      </button>
+      <div css="display: flex;">
+        <FieldWrapper>
+          <label htmlFor="CreatedAt">Created Date:</label>
           <input
             id="CreatedAt"
             type="date"
@@ -46,9 +58,9 @@ function JokesListFilters({ onChange, onAddJoke }: Props) {
             value={filters.CreatedAt}
             onChange={handleChange}
           />
-        </FilterField>
-        <FilterField>
-          <Label htmlFor="Views">Views:</Label>
+        </FieldWrapper>
+        <FieldWrapper>
+          <label htmlFor="Views">Views:</label>
           <input
             id="Views"
             type="number"
@@ -56,42 +68,21 @@ function JokesListFilters({ onChange, onAddJoke }: Props) {
             value={filters.Views}
             onChange={handleChange}
           />
-        </FilterField>
-        <ClearButton onClick={handleClear}>Clear</ClearButton>
-      </FiltersWrapper>
-    </Wrapper>
+        </FieldWrapper>
+        <button onClick={handleClear} css="margin-left: 0.5rem;">
+          Clear
+        </button>
+      </div>
+    </div>
   );
 }
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-`;
+const FieldWrapper = styled.div`
+  margin-left: 0.5rem;
 
-const AddButton = styled.button`
-  display: flex;
-  align-items: center;
-`;
-
-const PlusIcon = styled(FaPlus)`
-  margin-left: 8px;
-`;
-
-const FiltersWrapper = styled.div`
-  display: flex;
-`;
-
-const FilterField = styled.div`
-  margin-left: 8px;
-`;
-
-const ClearButton = styled.button`
-  margin-left: 8px;
-`;
-
-const Label = styled.label`
-  margin-right: 8px;
+  label {
+    margin-right: 0.25rem;
+  }
 `;
 
 export default JokesListFilters;

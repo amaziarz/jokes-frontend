@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 const LIMIT_OPTIONS = [5, 10];
 export const initialLimit = LIMIT_OPTIONS[0];
 
@@ -21,36 +19,35 @@ function Pagination({
   onLimitChange,
 }: Props) {
   return (
-    <Wrapper>
+    <div
+      css={`
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      `}
+    >
       <button disabled={page === 1} onClick={() => onPreviousPage(page - 1)}>
         {'<'}
       </button>
       <button disabled={count < limit} onClick={() => onNextPage(page + 1)}>
         {'>'}
       </button>
-      <Select
+      <select
         name="limit"
         value={limit}
         onChange={(e) => onLimitChange(parseInt(e.target.value))}
+        css={`
+          margin-left: 0.5rem;
+        `}
       >
         {LIMIT_OPTIONS.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>
         ))}
-      </Select>
-    </Wrapper>
+      </select>
+    </div>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-`;
-
-const Select = styled.select`
-  margin-left: 8px;
-`;
 
 export default Pagination;

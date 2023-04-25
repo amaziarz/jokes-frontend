@@ -13,7 +13,7 @@ interface Props {
 
 function JokeForm({ joke, onSubmit, onRemove, isSubmitting, isError }: Props) {
   return (
-    <Wrapper>
+    <div css="width: 100%;">
       <Formik<JokeFormValues>
         initialValues={{
           Title: joke?.Title || '',
@@ -47,8 +47,11 @@ function JokeForm({ joke, onSubmit, onRemove, isSubmitting, isError }: Props) {
               <Field as="textarea" rows="10" id="Body" name="Body" />
               <ErrorMessage name="Body" component="div" />
             </FieldWrapper>
-            <ButtonsWrapper
-              justifyContent={joke ? 'space-between' : 'flex-end'}
+            <div
+              css={`
+                display: flex;
+                justify-content: ${joke ? 'space-between' : 'flex-end'};
+              `}
             >
               {joke ? (
                 <button
@@ -62,7 +65,7 @@ function JokeForm({ joke, onSubmit, onRemove, isSubmitting, isError }: Props) {
               <button type="submit" disabled={isSubmitting}>
                 Submit
               </button>
-            </ButtonsWrapper>
+            </div>
           </Form>
         )}
       </Formik>
@@ -71,30 +74,28 @@ function JokeForm({ joke, onSubmit, onRemove, isSubmitting, isError }: Props) {
           Something went wrong. Please try again.
         </Paragraph>
       ) : null}
-    </Wrapper>
+    </div>
   );
 }
 
-const Wrapper = styled.div`
-  width: 100%;
-`;
-
 const FieldWrapper = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 
   label {
     display: block;
     line-height: 1.5;
   }
 
+  input {
+    width: 15rem;
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+
   textarea {
     width: 100%;
+    padding: 0.5rem;
   }
-`;
-
-const ButtonsWrapper = styled.div<{ justifyContent: string }>`
-  display: flex;
-  justify-content: ${(props) => props.justifyContent};
 `;
 
 export default JokeForm;

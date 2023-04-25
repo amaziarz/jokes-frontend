@@ -1,5 +1,4 @@
 import { Navigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { useJoke, useRemoveJoke, useUpdateJoke } from 'services/jokesApi';
 import JokeForm from 'common/components/JokeForm';
 import { Paragraph, Spinner } from 'common/components/styled';
@@ -17,7 +16,12 @@ function EditJoke() {
   }
 
   return (
-    <Wrapper>
+    <div
+      css={`
+        display: flex;
+        justify-content: center;
+      `}
+    >
       {jokeQuery.isLoading ? <Spinner /> : null}
       {jokeQuery.isSuccess ? (
         <JokeForm
@@ -33,13 +37,8 @@ function EditJoke() {
         />
       ) : null}
       {jokeQuery.isError ? <Paragraph>Joke not found</Paragraph> : null}
-    </Wrapper>
+    </div>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
 
 export default EditJoke;

@@ -1,5 +1,4 @@
 import { ChangeEvent, ReactNode } from 'react';
-import styled from 'styled-components';
 import { useAppTheme } from 'context/AppThemeProvider';
 import { useAuth } from 'context/AuthProvider';
 
@@ -16,54 +15,51 @@ function AppContainer({ children }: Props) {
   }
 
   return (
-    <Wrapper>
-      <Header>
-        <ButtonsWrapper>
+    <div css="padding: 32px 64px;">
+      <header
+        css={`
+          display: flex;
+          justify-content: flex-end;
+        `}
+      >
+        <div
+          css={`
+            display: flex;
+            flex-direction: column;
+          `}
+        >
           {isAuthenticated ? (
-            <LogoutButton onClick={logout}>Logout</LogoutButton>
+            <button css="margin-bottom: 1rem;" onClick={logout}>
+              Logout
+            </button>
           ) : null}
-          <Checkbox>
+          <div
+            css={`
+              display: flex;
+              align-items: center;
+            `}
+          >
             <input
               id="darkMode"
               type="checkbox"
               onChange={handleThemeChange}
               checked={themeMode === 'dark'}
             />
-            <label htmlFor="darkMode">Dark</label>
-          </Checkbox>
-        </ButtonsWrapper>
-      </Header>
+            <label
+              htmlFor="darkMode"
+              css={`
+                font-size: 1.25rem;
+                margin-left: 0.25rem;
+              `}
+            >
+              Dark
+            </label>
+          </div>
+        </div>
+      </header>
       {children}
-    </Wrapper>
+    </div>
   );
 }
-
-const Wrapper = styled.div`
-  padding: 32px 64px;
-`;
-
-const Header = styled.header`
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const ButtonsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const LogoutButton = styled.button`
-  margin-bottom: 16px;
-`;
-
-const Checkbox = styled.div`
-  display: flex;
-  align-items: center;
-
-  label {
-    font-size: 1.25rem;
-    margin-left: 0.25rem;
-  }
-`;
 
 export default AppContainer;

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Joke } from 'types/Joke';
 import { formatDate, formatEmail, LIST_DATE_FORMAT } from 'common/utils';
 import { SortOrder } from 'types/SortOrder';
@@ -14,12 +14,17 @@ interface Props {
 
 function JokesList({ jokes, onSort, sortOrder, sortKey }: Props) {
   return (
-    <Table>
+    <table
+      css={`
+        border-collapse: collapse;
+        margin-bottom: 0.5rem;
+      `}
+    >
       <thead>
         <tr>
-          <th>Title</th>
-          <th>Author</th>
-          <th>
+          <TableHeader>Title</TableHeader>
+          <TableHeader>Author</TableHeader>
+          <TableHeader>
             Created Date
             <Sort
               sortKey="CreatedAt"
@@ -27,8 +32,8 @@ function JokesList({ jokes, onSort, sortOrder, sortKey }: Props) {
               currentOrder={sortOrder}
               onSort={onSort}
             />
-          </th>
-          <th>
+          </TableHeader>
+          <TableHeader>
             Views
             <Sort
               sortKey="Views"
@@ -36,45 +41,45 @@ function JokesList({ jokes, onSort, sortOrder, sortKey }: Props) {
               currentOrder={sortOrder}
               onSort={onSort}
             />
-          </th>
+          </TableHeader>
         </tr>
       </thead>
       <tbody>
         {jokes.map((joke) => (
           <tr key={joke.id}>
-            <td>
-              <TableLink to={`/jokes/${joke.id}`}>{joke.Title}</TableLink>
-            </td>
-            <td>{formatEmail(joke.Author)}</td>
-            <td>{formatDate(joke.CreatedAt, LIST_DATE_FORMAT)}</td>
-            <td>{joke.Views}</td>
+            <TableItem>
+              <Link
+                to={`/jokes/${joke.id}`}
+                css={css`
+                  color: ${(props) => props.theme.fontColor};
+                `}
+              >
+                {joke.Title}
+              </Link>
+            </TableItem>
+            <TableItem>{formatEmail(joke.Author)}</TableItem>
+            <TableItem>
+              {formatDate(joke.CreatedAt, LIST_DATE_FORMAT)}
+            </TableItem>
+            <TableItem>{joke.Views}</TableItem>
           </tr>
         ))}
       </tbody>
-    </Table>
+    </table>
   );
 }
 
-const Table = styled.table`
-  border-collapse: collapse;
-  margin-bottom: 8px;
-
-  th,
-  td {
-    padding: 8px 24px;
-  }
-
-  th {
-    font-weight: 700;
-  }
-
-  td:not(:last-child) {
-    border-right: 1px solid;
-  }
+const TableHeader = styled.th`
+  padding: 0.5rem 1.5rem;
+  font-weight: 700;
 `;
 
-const TableLink = styled(Link)`
-  color: ${(props) => props.theme.fontColor};
+const TableItem = styled.td`
+  padding: 0.5rem 1.5rem;
+
+  &:not(:last-child) {
+    border-right: 1px solid;
+  }
 `;
 
 export default JokesList;

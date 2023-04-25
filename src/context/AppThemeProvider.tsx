@@ -12,6 +12,11 @@ import { appTheme, AppThemeMode } from 'config/theme';
 const GlobalStyle = createGlobalStyle`
   html {
     font-family: sans-serif;
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after {
+    box-sizing: inherit;
   }
   
   body {
