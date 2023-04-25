@@ -43,7 +43,7 @@ function JokesList({ jokes, onSort, sortOrder, sortKey }: Props) {
         {jokes.map((joke) => (
           <tr key={joke.id}>
             <td>
-              <Link to={`/jokes/${joke.id}`}>{joke.Title}</Link>
+              <TableLink to={`/jokes/${joke.id}`}>{joke.Title}</TableLink>
             </td>
             <td>{formatEmail(joke.Author)}</td>
             <td>{formatDate(joke.CreatedAt, LIST_DATE_FORMAT)}</td>
@@ -71,6 +71,10 @@ const Table = styled.table`
   td:not(:last-child) {
     border-right: 1px solid;
   }
+`;
+
+const TableLink = styled(Link)`
+  color: ${(props) => props.theme.fontColor};
 `;
 
 export default JokesList;

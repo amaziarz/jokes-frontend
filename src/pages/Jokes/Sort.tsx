@@ -35,6 +35,7 @@ const SortButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  color: ${(props) => props.theme.fontColor};
 `;
 
 export default Sort;
