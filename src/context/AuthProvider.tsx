@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRemoveJokeQueries } from 'services/jokesApi';
+import { useQueryClient } from 'react-query';
 import { resetJokeListParams, useAppState } from './AppStateProvider';
 
 const AUTH_TOKEN_STORAGE_KEY = '__auth_token__';
@@ -35,7 +35,7 @@ interface Props {
 
 function AuthProvider({ children }: Props) {
   const navigate = useNavigate();
-  const removeJokeQueries = useRemoveJokeQueries();
+  const queryClient = useQueryClient();
 
   const [authToken, setAuthToken] = useState(() =>
     localStorage.getItem(AUTH_TOKEN_STORAGE_KEY),
@@ -61,9 +61,9 @@ function AuthProvider({ children }: Props) {
     setAuthToken(null);
     localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
     resetJokeListParams(dispatch);
-    removeJokeQueries();
+    queryClient.removeQueries();
     navigate('/jokes');
-  }, [dispatch, navigate, removeJokeQueries]);
+  }, [dispatch, navigate, queryClient]);
 
   const value = useMemo<AuthContextValue>(
     () => ({

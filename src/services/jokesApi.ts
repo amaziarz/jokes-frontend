@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import {
   QueryClient,
   useMutation,
@@ -127,18 +126,8 @@ export function useRemoveJoke() {
     mutationFn: removeJoke,
     onSuccess: async (_, jokeId) => {
       await invalidateJokes(queryClient);
-      queryClient.removeQueries([QUERY_KEYS.JOKE, { jokeId }]);
+      queryClient.removeQueries({ queryKey: [QUERY_KEYS.JOKE, { jokeId }] });
       navigate('/jokes', { replace: true });
     },
   });
-}
-
-export function useRemoveJokeQueries() {
-  const queryClient = useQueryClient();
-
-  return useCallback(() => {
-    Object.values(QUERY_KEYS).forEach((key) => {
-      queryClient.removeQueries({ queryKey: [key] });
-    });
-  }, [queryClient]);
 }
