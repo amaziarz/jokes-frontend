@@ -6,7 +6,7 @@ function AddJoke() {
 
   return (
     <JokeForm
-      onSubmit={(values) => addJokeMutation.mutate(values)}
+      onSubmit={addJokeMutation.mutate}
       isSubmitting={addJokeMutation.isLoading}
       isError={addJokeMutation.isError}
     />

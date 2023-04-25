@@ -1,7 +1,15 @@
 import styled from 'styled-components';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { number, object, ObjectSchema, string } from 'yup';
 import { Joke, JokeFormValues } from 'types/Joke';
 import { Paragraph } from 'common/components/styled';
+
+const validationSchema: ObjectSchema<JokeFormValues> = object({
+  Title: string().required(),
+  Author: string().email().required(),
+  Body: string().required(),
+  Views: number().required(),
+});
 
 interface Props {
   joke?: Joke;
@@ -21,31 +29,30 @@ function JokeForm({ joke, onSubmit, onRemove, isSubmitting, isError }: Props) {
           Body: joke?.Body || '',
           Views: joke?.Views || 0,
         }}
-        onSubmit={(values) => {
-          onSubmit(values);
-        }}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
       >
         {() => (
           <Form>
             <FieldWrapper>
               <label htmlFor="Title">Title</label>
               <Field id="Title" type="text" name="Title" />
-              <ErrorMessage name="Title" component="div" />
+              <JokeFormError name="Title" />
             </FieldWrapper>
             <FieldWrapper>
               <label htmlFor="Author">Author</label>
               <Field id="Author" type="text" name="Author" />
-              <ErrorMessage name="Author" component="div" />
+              <JokeFormError name="Author" />
             </FieldWrapper>
             <FieldWrapper>
               <label htmlFor="Views">Views</label>
               <Field id="Views" type="number" name="Views" min="0" />
-              <ErrorMessage name="Views" component="div" />
+              <JokeFormError name="Views" />
             </FieldWrapper>
             <FieldWrapper>
               <label htmlFor="Body">Body</label>
               <Field as="textarea" rows="10" id="Body" name="Body" />
-              <ErrorMessage name="Body" component="div" />
+              <JokeFormError name="Body" />
             </FieldWrapper>
             <div
               css={`
@@ -97,5 +104,13 @@ const FieldWrapper = styled.div`
     padding: 0.5rem;
   }
 `;
+
+interface JokeFormErrorProps {
+  name: keyof JokeFormValues;
+}
+
+function JokeFormError({ name }: JokeFormErrorProps) {
+  return <ErrorMessage name={name} component="div" css="color: red;" />;
+}
 
 export default JokeForm;

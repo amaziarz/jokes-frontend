@@ -7,7 +7,6 @@ import AppThemeProvider from './AppThemeProvider';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
       staleTime: 60 * 1000,
     },
   },
