@@ -3,6 +3,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
@@ -57,10 +58,10 @@ function AppThemeProvider({ children }: Props) {
   }, []);
 
   const theme = appTheme[themeMode];
-  const value: AppThemeContextValue = {
-    themeMode,
-    changeTheme,
-  };
+  const value = useMemo<AppThemeContextValue>(
+    () => ({ themeMode, changeTheme }),
+    [changeTheme, themeMode],
+  );
 
   return (
     <ThemeProvider theme={theme}>
