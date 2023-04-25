@@ -10,15 +10,20 @@ import { UseJokesParams } from 'services/jokesApi';
 import { initialLimit } from 'pages/Jokes/Pagination';
 
 const JOKE_LIST_PARAMS_SET = 'JOKE_LIST_PARAMS_SET';
+const JOKE_LIST_PARAMS_RESET = 'JOKE_LIST_PARAMS_RESET';
 
 interface AppState {
   jokeListParams: UseJokesParams;
 }
 
-type AppActions = {
-  type: typeof JOKE_LIST_PARAMS_SET;
-  payload: Partial<UseJokesParams>;
-};
+type AppActions =
+  | {
+      type: typeof JOKE_LIST_PARAMS_SET;
+      payload: Partial<UseJokesParams>;
+    }
+  | {
+      type: typeof JOKE_LIST_PARAMS_RESET;
+    };
 
 type AppDispatch = Dispatch<AppActions>;
 
@@ -41,18 +46,8 @@ export const setJokeListParams = (
   params: Partial<UseJokesParams>,
 ) => dispatch({ type: JOKE_LIST_PARAMS_SET, payload: params });
 
-function appReducer(state: AppState, action: AppActions): AppState {
-  if (action.type === JOKE_LIST_PARAMS_SET) {
-    return {
-      ...state,
-      jokeListParams: {
-        ...state.jokeListParams,
-        ...action.payload,
-      },
-    };
-  }
-  return state;
-}
+export const resetJokeListParams = (dispatch: AppDispatch) =>
+  dispatch({ type: JOKE_LIST_PARAMS_RESET });
 
 const initialState: AppState = {
   jokeListParams: {
@@ -66,6 +61,22 @@ const initialState: AppState = {
     },
   },
 };
+
+function appReducer(state: AppState, action: AppActions): AppState {
+  if (action.type === JOKE_LIST_PARAMS_SET) {
+    return {
+      ...state,
+      jokeListParams: {
+        ...state.jokeListParams,
+        ...action.payload,
+      },
+    };
+  }
+  if (action.type === JOKE_LIST_PARAMS_RESET) {
+    return initialState;
+  }
+  return state;
+}
 
 interface Props {
   children: ReactNode;

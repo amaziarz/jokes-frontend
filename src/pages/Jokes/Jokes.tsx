@@ -43,6 +43,7 @@ function Jokes() {
             }),
           )}
           onAddJoke={() => navigate('/jokes/new')}
+          initialFilters={filters}
         />
         {jokesQuery.isSuccess ? (
           <>

@@ -6,14 +6,10 @@ import { JokesFilters } from 'services/jokesApi';
 interface Props {
   onChange: (filters: JokesFilters) => void;
   onAddJoke: () => void;
+  initialFilters: JokesFilters;
 }
 
-export const initialFilters: JokesFilters = {
-  CreatedAt: '',
-  Views: '',
-};
-
-function JokesListFilters({ onChange, onAddJoke }: Props) {
+function JokesListFilters({ onChange, onAddJoke, initialFilters }: Props) {
   const [filters, setFilters] = useState<JokesFilters>(initialFilters);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -29,8 +25,12 @@ function JokesListFilters({ onChange, onAddJoke }: Props) {
   function handleClear() {
     const areFiltersChanged = Object.values(filters).some(Boolean);
     if (areFiltersChanged) {
-      setFilters(initialFilters);
-      onChange(initialFilters);
+      const emptyFilters = {
+        Views: '',
+        CreatedAt: '',
+      };
+      setFilters(emptyFilters);
+      onChange(emptyFilters);
     }
   }
 

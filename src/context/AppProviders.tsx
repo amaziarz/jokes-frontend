@@ -21,11 +21,11 @@ function AppProviders({ children }: Props) {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <AuthProvider>
-          <AppThemeProvider>
-            <AppStateProvider>{children}</AppStateProvider>
-          </AppThemeProvider>
-        </AuthProvider>
+        <AppThemeProvider>
+          <AppStateProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </AppStateProvider>
+        </AppThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
