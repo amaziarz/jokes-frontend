@@ -1,23 +1,32 @@
-import { defineConfig } from 'vite';
+import { Connect, defineConfig, Plugin } from 'vite';
 import path from 'path';
 import fs from 'fs';
 import react from '@vitejs/plugin-react';
 
-const rootRedirectPlugin = () => ({
+const redirectMiddleware: Connect.NextHandleFunction = (req, res, next) => {
+  const [path] = req.url.split('?');
+  if (path === '/') {
+    res
+      .writeHead(302, {
+        Location: '/jokes',
+      })
+      .end();
+  } else {
+    next();
+  }
+};
+
+const devServerPlugin = (): Plugin => ({
   name: 'configure-server',
   configureServer(server) {
-    server.middlewares.use((req, res, next) => {
-      const [path] = req.url.split('?');
-      if (path === '/') {
-        res
-          .writeHead(302, {
-            Location: '/jokes',
-          })
-          .end();
-      } else {
-        next();
-      }
-    });
+    server.middlewares.use(redirectMiddleware);
+  },
+});
+
+const previewServerPlugin = (): Plugin => ({
+  name: 'configure-preview-server',
+  configurePreviewServer(server) {
+    server.middlewares.use(redirectMiddleware);
   },
 });
 
@@ -41,7 +50,8 @@ export default defineConfig({
         plugins: ['babel-plugin-styled-components'],
       },
     }),
-    rootRedirectPlugin(),
+    devServerPlugin(),
+    previewServerPlugin(),
   ],
   resolve: {
     alias: aliasDirectories,
